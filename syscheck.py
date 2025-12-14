@@ -1,5 +1,8 @@
-﻿import os
+import os
+import time
 import platform
+import psutil
+import keyboard
 
 def plat():
 	osms = platform.system()
@@ -106,11 +109,61 @@ def infolin():
  os.system("aplay -l")
  mein()
   
+# quickquit
+def qq():
+  	osms = platform.system()
+  	if osms == "Linux":
+  		print("\n")
+  	elif osms == "Darwin":
+  		print("\n")
+  	elif osms == "Windows":
+  			try:
+  				if keyboard.is_pressed("tab"):
+  					exit()
+  			except :
+  					print('''ошибка, возрат в меню''')
+  					mein()
+ 
+def realtime():
+	osms = platform.system()
+	print('''\nизмерение в реальном времени''')
+	try:
+		if osms == "Windows":
+			os.system("cls")
+		else:
+			os.system("clear")
+		cpc = psutil.cpu_stats()
+		nty = psutil.net_io_counters()
+		opr = psutil.virtual_memory().percent
+		cp = psutil.cpu_freq(percpu = True)
+		cpu = psutil.cpu_percent(
+		interval=0.6)
+		print('''процент загруженности процессора: ''', cpu, '''\nтекущая частота процессора:''', cp, '''\nстатистика процессора:''', cpc, '''\nоперативная память: ''', opr, '''\nсеть: ''', nty)
+		time.sleep(0.3)
+	except PermissionError as perm:
+		print(f"\nошибка прав: {perm}")
+		print("\nвозращение в меню")
+		mein()
+	except ImportError as imp:
+		print("ошибка импорта: {imp}")
+		print("возращение в меню")
+		mein()
+	while True:
+		nty = psutil.net_io_counters()
+		opr = psutil.virtual_memory().percent
+		cp = psutil.cpu_freq(percpu = True)
+		cpu = psutil.cpu_percent(
+		interval=0.6)
+		qq()
+		print('''процент загруженности процессора: ''', cpu, '''\nтекущая частота процессора:''', cp, '''статистика процессора:''', cpc, '''оперативная память: ''', opr, '''сеть''', nty)
+		time.sleep(0.3)
+	
 def mein():
 	osms = platform.system()
 	print("\nГлавное Меню")
 	print("By NYA18")
-	print('''\n1. - базовая информация\n2. - подробная информация\n3. - зависимости(linux only)\n4. - выход''')
+	qq()
+	print('''\n1. - базовая информация\n2. - подробная информация\n3. - зависимости(linux only)\n4. - метрики в реальном времени\n5. - выход''')
 	mei = int(input(":  "))
 	if mei == 1:
 		plat()
@@ -127,6 +180,9 @@ def mein():
 	elif mei == 3:
 		menu()
 	elif mei == 4:
+		qq()
+		realtime()
+	elif mei == 5:
 		exit()
 	else:
 		print('''выбери существующий номер''')
